@@ -9,6 +9,9 @@
   "author": "Yusuf Elik",
   "license": "ISC",
   "dependencies": {
-    "express": "^4.21.1"
-  }
+    "express": "^4.21.1",
+    "mongoose": "^8.7.1",
+    "save": "^2.9.0"
+  },
+  "type": "module"
 }
