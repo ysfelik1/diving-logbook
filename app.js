@@ -2,10 +2,12 @@ import express from 'express';
 
 const app = express();
 
+import usersRoutes from './api/routes/users.js'; 
+import divesRoutes from './api/routes/dives.js'; 
+
+
 // Your middleware, routes, etc.
-app.use((req,res,next)=>{
-   res.status(200).json({
-      message:'It is working!'
-   })
-})
+app.use('/users',usersRoutes);
+app.use('/dives',divesRoutes);
+
 export default app;
