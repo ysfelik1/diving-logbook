@@ -2,10 +2,15 @@ import express from "express";
 
 const app = express();
 
+import bodyParser from "body-parser";
 import usersRoutes from "./api/routes/users.js";
 import divesRoutes from "./api/routes/dives.js";
 
-// Your middleware, routes, etc.
+// middlewares
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json());
+
+// routes
 app.use("/users", usersRoutes);
 app.use("/dives", divesRoutes);
 
