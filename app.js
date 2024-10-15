@@ -11,7 +11,11 @@ import divesRoutes from "./api/routes/dives.js";
 import mongoose from "mongoose";
 
 const mongoURI = `mongodb+srv://${process.env.MONGO_USER}:${process.env.MONGO_PASSWORD}@${process.env.MONGO_CLUSTER}/?retryWrites=true&w=majority&appName=${process.env.MONGO_DB_NAME}`;
-mongoose.connect(mongoURI, { useMongoClient: true });
+
+mongoose
+  .connect(mongoURI)
+  .then(() => console.log("MongoDB connected"))
+  .catch((err) => console.error("MongoDB connection error:", err));
 
 // middlewares
 app.use(bodyParser.urlencoded({ extended: false }));

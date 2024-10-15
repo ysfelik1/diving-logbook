@@ -1,5 +1,5 @@
 import express from "express";
-import Dive from "../models/Dive";
+import Dive from "../models/dive.js";
 import mongoose from "mongoose";
 
 const router = express.Router();
@@ -22,11 +22,11 @@ router.get("/:id", (req, res, next) => {
 router.post("/", (req, res, next) => {
   const dive = new Dive({
     _id: new mongoose.Types.ObjectId(),
-    location: req.body.name,
-    date: req.body.lastnName,
-    diveSite: req.body.currentLevel,
-    timeIn: req.body.country,
-    timeOut: req.body.birthOfday,
+    location: req.body.location,
+    date: req.body.date,
+    diveSite: req.body.diveSite,
+    timeIn: req.body.timeIn,
+    timeOut: req.body.timeOut,
     maxDepth: req.body.maxDepth,
     avgDepth: req.body.avgDepth,
     visibility: req.body.visibility,
@@ -38,13 +38,18 @@ router.post("/", (req, res, next) => {
     .save()
     .then((result) => {
       console.log(result);
+      res.status(201).json({
+        message: "New dive saved",
+        createdDive: dive,
+      });
     })
-    .catch((err) => console.log(err));
-
-  res.status(201).json({
-    message: "New dive saved :" + " " + id,
-    createdDive: dive,
-  });
+    .catch((err) => {
+      console.log(err);
+      res.status(201).json({
+        message: "New dive saved with ID: " + dive._id,
+        createdDive: dive,
+      });
+    });
 });
 
 router.patch("/:id", (req, res, next) => {
