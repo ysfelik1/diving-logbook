@@ -1,4 +1,4 @@
-import mongoose, { NativeBuffer } from "mongoose";
+import mongoose from "mongoose";
 
 const diveSchema = mongoose.Schema({
   _id: mongoose.Types.ObjectId,
