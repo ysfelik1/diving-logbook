@@ -1,5 +1,5 @@
-import { createServer } from 'http';
-import app from './app.js'; // Make sure app.js exists and is properly exported
+import { createServer } from "http";
+import app from "./app.js"; // Make sure app.js exists and is properly exported
 
 const port = process.env.PORT || 3000;
 
