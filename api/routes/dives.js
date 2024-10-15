@@ -1,4 +1,7 @@
 import express from "express";
+import Dive from "../models/Dive";
+import mongoose from "mongoose";
+
 const router = express.Router();
 
 router.get("/", (req, res, next) => {
@@ -17,8 +20,8 @@ router.get("/:id", (req, res, next) => {
 });
 
 router.post("/", (req, res, next) => {
-  const dive = {
-    id: req.body.id,
+  const dive = new Dive({
+    _id: new mongoose.Types.ObjectId(),
     location: req.body.name,
     date: req.body.lastnName,
     diveSite: req.body.currentLevel,
@@ -29,10 +32,18 @@ router.post("/", (req, res, next) => {
     visibility: req.body.visibility,
     current: req.body.current,
     notes: req.body.notes,
-  };
+  });
+
+  dive
+    .save()
+    .then((result) => {
+      console.log(result);
+    })
+    .catch((err) => console.log(err));
 
   res.status(201).json({
     message: "New dive saved :" + " " + id,
+    createdDive: dive,
   });
 });
 
