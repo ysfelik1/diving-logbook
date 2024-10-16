@@ -4,24 +4,44 @@ import mongoose from "mongoose";
 
 const router = express.Router();
 
-router.get("/", (req, res, next) => {
-  res.status(200).json({
-    message: "GET /dives",
-  });
-});
-
-router.get("/:id", (req, res, next) => {
-  const id = req.params.id;
-  if (id) {
+// GET /dives
+router.get("/", async (req, res) => {
+  try {
+    const dives = await Dive.find(); // Retrieve all dives from the database
     res.status(200).json({
-      message: "Parameter is " + id,
+      message: "List of dives",
+      dives, // Send the list of users in the response
     });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Failed to retrieve dives" });
   }
 });
 
-router.post("/", (req, res, next) => {
+// GET /dives/:id
+router.get("/:id", async (req, res) => {
+  const id = req.params.id;
+  if (!id) {
+    return res.status(400).json({ message: "ID is required" });
+  }
+
+  try {
+    const dive = await Dive.findById(id); // Retrieve the dive from the database
+    if (!dive) {
+      return res.status(404).json({ message: "Dive not found" });
+    }
+    res.status(200).json({ message: "Dive found", dive });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Error retrieving dive" });
+  }
+});
+
+// POST /dives
+router.post("/", async (req, res) => {
   const dive = new Dive({
-    _id: new mongoose.Types.ObjectId(),
+    _id: new mongoose.Types.ObjectId(), // Automatically generate ObjectId for new dives
+    diver: req.body.diver,
     location: req.body.location,
     date: req.body.date,
     diveSite: req.body.diveSite,
@@ -34,34 +54,64 @@ router.post("/", (req, res, next) => {
     notes: req.body.notes,
   });
 
-  dive
-    .save()
-    .then((result) => {
-      console.log(result);
-      res.status(201).json({
-        message: "New dive saved",
-        createdDive: dive,
-      });
-    })
-    .catch((err) => {
-      console.log(err);
-      res.status(201).json({
-        message: "New dive saved with ID: " + dive._id,
-        createdDive: dive,
-      });
+  try {
+    const result = await dive.save(); // Save the dive to the database
+    console.log(result);
+    res.status(201).json({
+      message: "New dive saved",
+      createdDive: result,
     });
+  } catch (error) {
+    console.error(error); // Log the error for debugging
+    res.status(500).json({
+      message: "Failed to save new dive",
+      error: error.message, // Include error message for more context
+    });
+  }
 });
 
-router.patch("/:id", (req, res, next) => {
-  res.status(200).json({
-    message: "Update dive",
-  });
+// PATCH /dives/:id
+router.patch("/:id", async (req, res) => {
+  const id = req.params.id;
+
+  try {
+    const updatedDive = await Dive.findByIdAndUpdate(id, req.body, {
+      new: true, // Return the updated document
+      runValidators: true, // Validate fields against the schema
+    });
+
+    if (!updatedDive) {
+      return res.status(404).json({ message: "Dive not found" });
+    }
+
+    res.status(200).json({
+      message: "Dive updated",
+      updatedDive,
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Failed to update dive" });
+  }
 });
 
-router.delete("/:id", (req, res, next) => {
-  res.status(200).json({
-    message: "Delete dive",
-  });
+// DELETE /dives/:id
+router.delete("/:id", async (req, res) => {
+  const id = req.params.id;
+
+  try {
+    const deletedDive = await Dive.findByIdAndDelete(id);
+
+    if (!deletedDive) {
+      return res.status(404).json({ message: "Dive not found" });
+    }
+
+    res.status(200).json({
+      message: "Dive deleted",
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Failed to delete dive" });
+  }
 });
 
 export default router;
