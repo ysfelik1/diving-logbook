@@ -2,6 +2,7 @@ import mongoose from "mongoose";
 
 const diveSchema = mongoose.Schema({
   _id: mongoose.Types.ObjectId,
+  diver: { type: String, required: true },
   location: String,
   date: String,
   diveSite: String,
