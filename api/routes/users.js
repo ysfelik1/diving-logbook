@@ -39,6 +39,7 @@ router.get("/:id", async (req, res) => {
 router.post("/", async (req, res) => {
   const user = new User({
     email: req.body.email,
+    password: password,
     name: req.body.name,
     lastName: req.body.lastName,
     currentLevel: req.body.currentLevel,
@@ -47,7 +48,7 @@ router.post("/", async (req, res) => {
   });
 
   try {
-    const result = await user.save(); // Save the user to the database
+    const result = await user.save(); // Save the user to the database (SIGN UP)
     console.log(result);
     res.status(201).json({
       message: "New user saved",
@@ -63,12 +64,12 @@ router.post("/", async (req, res) => {
         error: error.message,
       });
     } else {
-
-    res.status(500).json({
-      message: "Failed to save new user",
-      error: error.message, // Include error message for more context
-    });
-  }}
+      res.status(500).json({
+        message: "Failed to save new user",
+        error: error.message, // Include error message for more context
+      });
+    }
+  }
 });
 
 // PATCH /users/:id
