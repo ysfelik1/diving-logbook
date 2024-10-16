@@ -55,10 +55,10 @@ router.post("/", async (req, res) => {
     });
 
     const result = await user.save(); // Save the user to the database (SIGN UP)
-    console.log(result);
+    console.log("New user saved :" + result.name);
     res.status(201).json({
       message: "New user saved",
-      createdUser: result,
+      createdUser: result.name,
     });
   } catch (error) {
     console.error(error); // Log the error for debugging
