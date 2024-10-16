@@ -1,5 +1,6 @@
 import express from "express";
 import User from "../models/user.js";
+import argon2 from "argon2"; // Import argon2 for password hashing
 
 const router = express.Router();
 
@@ -16,6 +17,7 @@ router.get("/", async (req, res) => {
     res.status(500).json({ message: "Failed to retrieve users" });
   }
 });
+
 // GET /users/:id
 router.get("/:id", async (req, res) => {
   const id = req.params.id;
@@ -37,17 +39,21 @@ router.get("/:id", async (req, res) => {
 
 // POST /users
 router.post("/", async (req, res) => {
-  const user = new User({
-    email: req.body.email,
-    password: password,
-    name: req.body.name,
-    lastName: req.body.lastName,
-    currentLevel: req.body.currentLevel,
-    country: req.body.country,
-    birthOfday: req.body.birthOfday,
-  });
+  const { email, password, name, lastName, currentLevel, country, birthOfday } =
+    req.body;
 
   try {
+    const hashedPassword = await argon2.hash(password); // Hash the password
+    const user = new User({
+      email,
+      password: hashedPassword, // Save the hashed password
+      name,
+      lastName,
+      currentLevel,
+      country,
+      birthOfday,
+    });
+
     const result = await user.save(); // Save the user to the database (SIGN UP)
     console.log(result);
     res.status(201).json({
@@ -75,8 +81,14 @@ router.post("/", async (req, res) => {
 // PATCH /users/:id
 router.patch("/:id", async (req, res) => {
   const id = req.params.id;
+  const { password } = req.body; // Extract password if provided
 
   try {
+    // Hash the password if it's being updated
+    if (password) {
+      req.body.password = await argon2.hash(password);
+    }
+
     const updatedUser = await User.findByIdAndUpdate(id, req.body, {
       new: true, // Return the updated document
       runValidators: true, // Validate fields against the schema
