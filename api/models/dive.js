@@ -3,8 +3,8 @@ import mongoose from "mongoose";
 const diveSchema = mongoose.Schema({
   _id: mongoose.Types.ObjectId,
   diver: { type: String, required: true },
-  location: String,
-  date: String,
+  location: { type: String, required: true },
+  date: { type: String, required: true },
   diveSite: String,
   timeIn: String,
   timeOut: String,
