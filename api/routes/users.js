@@ -55,11 +55,20 @@ router.post("/", async (req, res) => {
     });
   } catch (error) {
     console.error(error); // Log the error for debugging
+
+    if (error.code === 11000) {
+      // Handle duplicate key error
+      res.status(409).json({
+        message: "Email already exists",
+        error: error.message,
+      });
+    } else {
+
     res.status(500).json({
       message: "Failed to save new user",
       error: error.message, // Include error message for more context
     });
-  }
+  }}
 });
 
 // PATCH /users/:id
