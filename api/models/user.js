@@ -1,12 +1,12 @@
 import mongoose from "mongoose";
 
 const userSchema = mongoose.Schema({
-  email: req.body.email,
-  name: req.body.name,
-  lastName: req.body.lastName,
-  currentLevel: req.body.currentLevel,
-  country: req.body.country,
-  birthOfday: req.body.birthOfday,
+  email: String,
+  name: String,
+  lastName: String,
+  currentLevel: String,
+  country: String,
+  birthOfday: String,
 });
 
 const User = mongoose.model("user", userSchema);
