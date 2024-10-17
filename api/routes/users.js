@@ -1,6 +1,7 @@
 import express from "express";
 import User from "../models/user.js";
 import argon2 from "argon2"; // Import argon2 for password hashing
+import jwt from "jsonwebtoken";
 
 const router = express.Router();
 
@@ -104,7 +105,7 @@ router.post("/login", async (req, res) => {
     }
 
     // If login is successful
-    console.log("User logged in: " + user.name);
+    console.log("User logged in: " + user);
     res.status(200).json({
       message: "Login successful",
       loggedInUser: user.name,
