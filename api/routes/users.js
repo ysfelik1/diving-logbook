@@ -78,6 +78,46 @@ router.post("/", async (req, res) => {
   }
 });
 
+// User Login Route
+router.post("/login", async (req, res) => {
+  const { email, password } = req.body;
+
+  try {
+    // Find the user by email
+    const user = await User.findOne({ email });
+
+    // If user does not exist
+    if (!user) {
+      return res.status(404).json({
+        message: "User not found",
+      });
+    }
+
+    // Verify the password using argon2
+    const validPassword = await argon2.verify(user.password, password);
+
+    // If password is incorrect
+    if (!validPassword) {
+      return res.status(401).json({
+        message: "Incorrect password",
+      });
+    }
+
+    // If login is successful
+    console.log("User logged in: " + user.name);
+    res.status(200).json({
+      message: "Login successful",
+      loggedInUser: user.name,
+    });
+  } catch (error) {
+    console.error(error); // Log the error for debugging
+    res.status(500).json({
+      message: "Login failed",
+      error: error.message,
+    });
+  }
+});
+
 // PATCH /users/:id
 router.patch("/:id", async (req, res) => {
   const id = req.params.id;
