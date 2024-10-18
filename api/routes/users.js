@@ -102,14 +102,25 @@ router.post("/login", async (req, res) => {
       return res.status(401).json({
         message: "Incorrect password",
       });
-    }
+    } else {
+      // If login is successful
 
-    // If login is successful
-    console.log("User logged in: " + user);
-    res.status(200).json({
-      message: "Login successful",
-      loggedInUser: user.name,
-    });
+      const token = jwt.sign(
+        {
+          email: user.email,
+          Id: user._id,
+        },
+        process.env.JWT_KEY,
+        { expiresIn: "1h" }
+      );
+
+      console.log("User logged in: " + user);
+      return res.status(200).json({
+        message: "Login successful",
+        loggedInUser: user.name,
+        token: token,
+      });
+    }
   } catch (error) {
     console.error(error); // Log the error for debugging
     res.status(500).json({
