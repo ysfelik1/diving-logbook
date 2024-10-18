@@ -2,11 +2,11 @@ import express from "express";
 import User from "../models/user.js";
 import argon2 from "argon2"; // Import argon2 for password hashing
 import jwt from "jsonwebtoken";
-
+import checkAuth from "../middleware/checkAuth.js";
 const router = express.Router();
 
 // GET /users
-router.get("/", async (req, res) => {
+router.get("/", checkAuth, async (req, res) => {
   try {
     const users = await User.find(); // Retrieve all users from the database
     res.status(200).json({
@@ -20,7 +20,7 @@ router.get("/", async (req, res) => {
 });
 
 // GET /users/:id
-router.get("/:id", async (req, res) => {
+router.get("/:id", checkAuth, async (req, res) => {
   const id = req.params.id;
   if (!id) {
     return res.status(400).json({ message: "ID is required" });
@@ -38,7 +38,7 @@ router.get("/:id", async (req, res) => {
   }
 });
 
-// POST /users
+// POST /users (SIGN UP)
 router.post("/", async (req, res) => {
   const { email, password, name, lastName, currentLevel, country, birthOfday } =
     req.body;
@@ -55,7 +55,7 @@ router.post("/", async (req, res) => {
       birthOfday,
     });
 
-    const result = await user.save(); // Save the user to the database (SIGN UP)
+    const result = await user.save(); // Save the user to the database
     console.log("New user saved :" + result.name);
     res.status(201).json({
       message: "New user saved",
@@ -131,7 +131,7 @@ router.post("/login", async (req, res) => {
 });
 
 // PATCH /users/:id
-router.patch("/:id", async (req, res) => {
+router.patch("/:id", checkAuth, async (req, res) => {
   const id = req.params.id;
   const { password } = req.body; // Extract password if provided
 
@@ -161,7 +161,7 @@ router.patch("/:id", async (req, res) => {
 });
 
 // DELETE /users/:id
-router.delete("/:id", async (req, res) => {
+router.delete("/:id", checkAuth, async (req, res) => {
   const id = req.params.id;
 
   try {

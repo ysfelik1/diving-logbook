@@ -1,11 +1,12 @@
 import express from "express";
 import Dive from "../models/dive.js";
 import mongoose from "mongoose";
-
+import jwt from "jsonwebtoken";
+import checkAuth from "../middleware/checkAuth.js";
 const router = express.Router();
 
 // GET /dives
-router.get("/", async (req, res) => {
+router.get("/", checkAuth, async (req, res) => {
   try {
     const dives = await Dive.find(); // Retrieve all dives from the database
     res.status(200).json({
@@ -19,7 +20,7 @@ router.get("/", async (req, res) => {
 });
 
 // GET /dives/:id
-router.get("/:id", async (req, res) => {
+router.get("/:id", checkAuth, async (req, res) => {
   const id = req.params.id;
   if (!id) {
     return res.status(400).json({ message: "ID is required" });
@@ -38,7 +39,7 @@ router.get("/:id", async (req, res) => {
 });
 
 // POST /dives
-router.post("/", async (req, res) => {
+router.post("/", checkAuth, async (req, res) => {
   const dive = new Dive({
     _id: new mongoose.Types.ObjectId(), // Automatically generate ObjectId for new dives
     diver: req.body.diver,
@@ -71,7 +72,7 @@ router.post("/", async (req, res) => {
 });
 
 // PATCH /dives/:id
-router.patch("/:id", async (req, res) => {
+router.patch("/:id", checkAuth, async (req, res) => {
   const id = req.params.id;
 
   try {
@@ -95,7 +96,7 @@ router.patch("/:id", async (req, res) => {
 });
 
 // DELETE /dives/:id
-router.delete("/:id", async (req, res) => {
+router.delete("/:id", checkAuth, async (req, res) => {
   const id = req.params.id;
 
   try {
