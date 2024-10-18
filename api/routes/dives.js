@@ -1,7 +1,6 @@
 import express from "express";
 import Dive from "../models/dive.js";
 import mongoose from "mongoose";
-import jwt from "jsonwebtoken";
 import checkAuth from "../middleware/checkAuth.js";
 const router = express.Router();
 
