@@ -14,6 +14,23 @@ export const getAllDives = async (req, res) => {
   }
 };
 
+export const getUsersDives = async (req, res) => {
+  const { email } = req.body;
+  if (!email) {
+    return res.status(400).json({ message: "Email is required" });
+  }
+  try {
+    const diveList = await Dive.find({ diver: email });
+    if (diveList.length < 1) {
+      return res.status(404).json({ message: "Dive not found" });
+    }
+    res.status(200).json({ message: "Dive found", diveList });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Failed to retrieve dives" });
+  }
+};
+
 export const getOneDive = async (req, res) => {
   const id = req.params.id;
   if (!id) {
