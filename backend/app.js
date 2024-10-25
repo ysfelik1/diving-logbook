@@ -6,8 +6,8 @@ import dotenv from "dotenv";
 dotenv.config();
 
 import bodyParser from "body-parser";
-import usersRoutes from "./api/routes/users.js";
-import divesRoutes from "./api/routes/dives.js";
+import usersRoutes from "./routes/users.js";
+import divesRoutes from "./routes/dives.js";
 import mongoose from "mongoose";
 
 const mongoURI = `mongodb+srv://${process.env.MONGO_USER}:${process.env.MONGO_PASSWORD}@${process.env.MONGO_CLUSTER}/?retryWrites=true&w=majority&appName=${process.env.MONGO_DB_NAME}`;
