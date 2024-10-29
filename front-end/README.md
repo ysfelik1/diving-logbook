@@ -68,3 +68,23 @@ This section has moved here: [https://facebook.github.io/create-react-app/docs/d
 ### `npm run build` fails to minify
 
 This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+
+src/
+├── api/
+│ └── authApi.js # Handles API calls related to authentication
+├── assets/ # For images, fonts, and other assets
+├── components/
+│ ├── LoginForm.jsx # Component for login form UI
+│ └── ProtectedRoute.jsx # Component to protect routes for authenticated users
+├── contexts/
+│ └── AuthContext.js # Context for managing authentication state globally
+├── hooks/
+│ └── useAuth.js # Custom hook for authentication logic
+├── pages/
+│ ├── LoginPage.jsx # Login page that uses LoginForm component
+│ └── Dashboard.jsx # Sample protected page, e.g., admin dashboard
+├── utils/
+│ └── storage.js # Utility functions for token storage (localStorage/sessionStorage)
+├── App.js # Main App component, routes setup
+├── index.css # Global CSS
+└── index.js # Entry point for React

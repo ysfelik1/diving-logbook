@@ -1,40 +1,28 @@
-import "../index.css";
 import React, { useState } from "react";
+import { useAuth } from "../contexts/AuthContext";
+import { useNavigate } from "react-router-dom"; // Import useNavigate
+import "../index.css";
 
-function LoginPage() {
+const LoginForm = () => {
+  const { handleLogin } = useAuth();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const navigate = useNavigate(); // Initialize useNavigate
 
-  // Handles form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("Form submitted"); // Check if the function is triggered
     try {
-      // Send a POST request to your backend REST API
-      const response = await fetch("http://localhost:3001/users/login", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ email, password }),
-      });
-
-      if (response.ok) {
-        const data = await response.json();
-        console.log("Login successful:", data);
-        // Handle successful login, e.g., redirect or save token
-      } else {
-        console.log("Login failed");
-        // Handle login error, e.g., display error message
-      }
+      await handleLogin(email, password);
+      navigate("/Dashboard"); // Redirect to dashboard after successful login
     } catch (error) {
-      console.error("Error:", error);
+      console.error("Login error", error);
+      // Optionally, you can set an error state to display an error message
     }
   };
 
   return (
     <div className="login-container">
-      <h2>Divin Log Book</h2>
+      <h2>Diving Log Book</h2>
       <form onSubmit={handleSubmit}>
         <input
           type="text"
@@ -60,6 +48,6 @@ function LoginPage() {
       </form>
     </div>
   );
-}
+};
 
-export default LoginPage;
+export default LoginForm;
