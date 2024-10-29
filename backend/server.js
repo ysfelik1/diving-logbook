@@ -1,7 +1,7 @@
 import { createServer } from "http";
 import app from "./app.js"; // Make sure app.js exists and is properly exported
 
-const port = process.env.PORT || 3000;
+const port = process.env.PORT;
 
 // Pass the Express app as the request handler to createServer
 const server = createServer(app);

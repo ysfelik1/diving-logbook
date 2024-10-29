@@ -10,6 +10,9 @@ import usersRoutes from "./routes/users.js";
 import divesRoutes from "./routes/dives.js";
 import mongoose from "mongoose";
 
+import cors from "cors";
+app.use(cors());
+
 const mongoURI = `mongodb+srv://${process.env.MONGO_USER}:${process.env.MONGO_PASSWORD}@${process.env.MONGO_CLUSTER}/?retryWrites=true&w=majority&appName=${process.env.MONGO_DB_NAME}`;
 
 mongoose
