@@ -1,34 +1,37 @@
 import React, { useState } from "react";
 import { useAuth } from "../contexts/AuthContext";
-import { useNavigate } from "react-router-dom"; // Import useNavigate
+import { useNavigate } from "react-router-dom";
 import "../index.css";
 
 const LoginForm = () => {
   const { handleLogin } = useAuth();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const navigate = useNavigate(); // Initialize useNavigate
+  const [error, setError] = useState(null);
+  const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setError(null);
+
     try {
       await handleLogin(email, password);
-      navigate("/Dashboard"); // Redirect to dashboard after successful login
+      navigate("/dashboard"); // Only navigate if login is successful
     } catch (error) {
-      console.error("Login error", error);
-      // Optionally, you can set an error state to display an error message
+      console.error("Login error:", error);
+      setError("Invalid email or password. Please try again.");
     }
   };
 
   return (
     <div className="login-container">
-      <h2>Diving Log Book</h2>
+      <h2>Divin Log Book</h2>
       <form onSubmit={handleSubmit}>
         <input
           type="text"
           className="input-field"
           name="email"
-          placeholder="email"
+          placeholder="Email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           required
@@ -45,6 +48,8 @@ const LoginForm = () => {
         <button type="submit" className="login-button">
           Login
         </button>
+        {error && <p className="error-message">{error}</p>}{" "}
+        {/* Show error message */}
       </form>
     </div>
   );

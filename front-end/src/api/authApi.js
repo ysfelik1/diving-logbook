@@ -11,5 +11,7 @@ export const login = async (email, password) => {
     throw new Error("Login failed");
   }
 
-  return response.json();
+  const data = await response.json();
+  console.log("API response data:", data);
+  return data;
 };

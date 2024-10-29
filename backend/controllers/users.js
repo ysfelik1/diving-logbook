@@ -102,10 +102,14 @@ export const login = async (req, res) => {
         { expiresIn: "1h" }
       );
 
-      console.log("User logged in: " + user);
+      console.log("User logged in! ");
       return res.status(200).json({
         message: "Login successful",
-        loggedInUser: user.name,
+        user: {
+          id: user._id,
+          name: user.name,
+          email: user.email,
+        },
         token: token,
       });
     }
