@@ -1,7 +1,14 @@
 import React from "react";
+import AddDive from "../components/AddDive";
+import "./Dashboard.css";
 
 const Dashboard = () => {
-  return <div style={{ color: "black", fontSize: "24px" }}>Hello world!</div>;
+  return (
+    <div>
+      <p>Welcome to Dashboard!</p>
+      <AddDive />
+    </div>
+  );
 };
 
 export default Dashboard;
